@@ -34,19 +34,24 @@ reverse lst = foldl f [] lst where f t h = h:t
 
 -- Отображение элементов списка
 map :: (a -> b) -> [a] -> [b]
-map = todo
-
+map f lst = foldr (mapFunc f) [] lst
+    
+mapFunc :: (a -> b) -> a -> [b]-> [b]
+mapFunc f h t =  ((f h) : t)
 -- Произведение всех элементов списка
 product :: [Integer] -> Integer
-product = todo
+product = foldl (*) 1 
 
 -- Выделение из списка Maybe всех существующих значений
 catMaybes :: [Maybe a] -> [a]
-catMaybes = todo
+catMaybes = foldr (\i lst -> case i of
+                                 Just i -> i:lst
+                                 Nothing -> lst) []
 
 -- Диагональ матрицы
 diagonal :: [[a]] -> [a]
 diagonal = todo
+
 
 -- Фильтр для всех элементов, не соответствующих предикату
 filterNot :: (a -> Bool) -> [a] -> [a]
@@ -54,15 +59,17 @@ filterNot = todo
 
 -- Поиск элемента в списке
 elem :: (Eq a) => a -> [a] -> Bool
-elem = todo
+elem e [] = False
+elem e lst = foldl (||) False (map (\x -> x == e) lst) 
 
 -- Список чисел в диапазоне [from, to) с шагом step
 rangeTo :: Integer -> Integer -> Integer -> [Integer]
-rangeTo from to step = todo
+rangeTo from to step = unfoldr (\x -> if x < to then Just (x, x+step) else Nothing) from
+                                        
 
 -- Конкатенация двух списков
 append :: [a] -> [a] -> [a]
-append = todo
+append first second = foldr (\x res -> x:res)  second first
 
 -- Разбиение списка lst на куски размером n
 -- (последний кусок может быть меньше)
