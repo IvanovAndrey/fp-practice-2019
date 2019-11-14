@@ -12,13 +12,17 @@ import Prelude hiding (foldl, foldr, unfoldr, map, concatMap,
     filter, maxBy, minBy, reverse, sum, product, elem)
 
 foldl :: (b -> a -> b) -> b -> [a] -> b
-foldl = todo
+foldl f z [] = z
+foldl f z (h:t) = foldl f (f z h) t
 
 foldr :: (a -> b -> b) -> b -> [a] -> b
-foldr = todo
+foldr f z [] = z
+foldr f z (h:t) = f h (foldr f z t)
 
 unfoldr :: (b -> Maybe (a, b)) -> b -> [a]
-unfoldr = todo
+unfoldr f a = case f a of
+               Just (h, next) -> h:(unfoldr f next)
+               Nothing      -> []
 
 -- Сумма всех элементов списка (пример)
 sum :: [Integer] -> Integer
