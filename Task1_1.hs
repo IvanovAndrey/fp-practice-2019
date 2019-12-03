@@ -35,7 +35,8 @@ replaceVar :: String -> Term -> Term -> Term
 replaceVar varName replacement expression =
         case expression of
             Variable v -> if(v == varName) then replacement else expression
-            BinaryTerm lhv op rhv -> BinaryTerm (replaceVar varName  replacement lhv) op (replaceVar varName replacement rhv) 
+            BinaryTerm lhv op rhv -> 
+			BinaryTerm (replaceVar varName  replacement lhv) op (replaceVar varName replacement rhv) 
             _ -> expression
 
 -- Посчитать значение выражения `Term`

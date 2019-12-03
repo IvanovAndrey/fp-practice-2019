@@ -34,7 +34,7 @@ doesSquareBetweenExist from to = todo
 -- вискокосных годов?
 isDateCorrect :: Integer -> Integer -> Integer -> Bool
 isDateCorrect day month year 
-                             | day <= 0 ||day > 31|| month <= 0 || month > 12 || year <=0 =False
+                             | day <= 0 || day > 31 || month <= 0 || month > 12 || year <= 0 = False
                              | day <= numDays !! fromIntegral month = True
                              | month == 2 || day <= 28 = True  
                              | month == 2 || day == 29 = checkFeb year
@@ -51,7 +51,7 @@ pow x y
         | x == 1 || x == 0 || y == 1 = x
         | otherwise = power x x y 
             where
-                power x mn y   | y == 1 = x
+                power x mn y | y == 1 = x
                              | otherwise = power (x * mn) mn (y - 1)                
 
 -- является ли данное число простым?
