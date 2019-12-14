@@ -67,7 +67,16 @@ remove k (Node (key, value) left right)
 
 -- Поиск ближайшего снизу ключа относительно заданного
 nearestLE :: Integer -> TreeMap v -> (Integer, v)
-nearestLE i t = todo
+nearestLE i Empty = error "Could not find"
+nearestLE i (Node (k, v) l r) | k == i = (k, v)
+                              | k > i = nearestLE i l
+                              | k < i = case(r) of
+                                        Node (k, v) left _  | k == i -> (k, v)
+                                                            | k < i -> nearestLE i r
+                                                            | k > i -> case (left) of
+                                                                 Empty -> (k, v)
+                                                                 otherwise -> nearestLE i left
+                                        otherwise -> (k, v)
 
 -- Построение дерева из списка пар
 treeFromList :: [(Integer, v)] -> TreeMap v
@@ -78,7 +87,16 @@ treeFromList lst = foldr insert Empty lst
 listFromTree :: TreeMap v -> [(Integer, v)]
 listFromTree Empty = []
 listFromTree (Node (k, v) l r) = (k,v):listFromTree (remove k (Node (k, v) l r))
+
+
 -- Поиск k-той порядковой статистики дерева
+tSize :: TreeMap v -> Integer
+tSize Empty = 0
+tSize (Node _ left right ) = (tSize left) + 1 + (tSize right)
+
 kMean :: Integer -> TreeMap v -> (Integer, v)
 kMean _ Empty = error "Tree is empty"
--- доделаю
+kMean i (Node (key, value) left right ) | tSize left == i = (key, value)
+                                        | tSize left > i  = kMean i left
+                                        | otherwise     = kMean (i - (tSize left) - 1) right
+ 
