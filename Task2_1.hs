@@ -56,9 +56,9 @@ testament left (Node (rkey, rvalue) rleft rright) =
 
 remove :: Integer -> TreeMap v -> TreeMap v
 remove _ Empty = error "No such key in this tree"
-remote k (Node (key, value) left right)  
-             | k < key = remote k left 
-             | k > key = remote k right 
+remove k (Node (key, value) left right)  
+             | k < key = remove k left 
+             | k > key = remove k right 
              | k == key = case (left, right) of
                   (Empty, Empty) -> Empty
                   (Empty, right) -> right
@@ -71,12 +71,14 @@ nearestLE i t = todo
 
 -- Построение дерева из списка пар
 treeFromList :: [(Integer, v)] -> TreeMap v
-treeFromList lst = todo
+treeFromList [] = Empty
+treeFromList lst = foldr insert Empty lst
 
 -- Построение списка пар из дерева
 listFromTree :: TreeMap v -> [(Integer, v)]
-listFromTree t = todo
-
+listFromTree Empty = []
+listFromTree (Node (k, v) l r) = (k,v):listFromTree (remove k (Node (k, v) l r))
 -- Поиск k-той порядковой статистики дерева
 kMean :: Integer -> TreeMap v -> (Integer, v)
-kMean i t = todo
+kMean _ Empty = error "Tree is empty"
+-- доделаю
